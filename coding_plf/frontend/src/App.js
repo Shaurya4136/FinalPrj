@@ -12,7 +12,11 @@ import StudentNavbar from './components/StudentNavbar.js';
 import ClubCommunity from './pages/ClubHeadProfile/ClubCommunity.js';
 import ClubProfile from './pages/ClubHeadProfile/ClubProfile.js';
 import ClubPostPage from './pages/ClubHeadProfile/ClubPost.js';
-
+import CollegeNavbar from './components/CollegeNavbar.js';
+import CollegeCommunity from './pages/CollegeProfile/CollegeCommunite.js'
+import CollegeProfile from './pages/CollegeProfile/CollegeProfile.js';
+import CollegePostPage from './pages/CollegeProfile/CollegePost.js';
+import Collegepassword from './pages/CollegeProfile/Collegepassword.js';
 
 const App = () => {
   return (
@@ -32,6 +36,12 @@ const App = () => {
           <Route path="/club-profile" element={<ClubProfile />} />
           <Route path="/club-post" element={<ClubPostPage />} />
           <Route path="/club-logout" element={<OptPageSignin />} />
+          <Route path="/college-Community" element={<CollegeCommunity/>} />
+          <Route path="/college-Profile" element={<CollegeProfile />} />
+          <Route path="/college-Post" element={<CollegePostPage />} />
+          <Route path="/college-password" element={<Collegepassword />} />
+          <Route path="/college-Logout" element={<OptPageSignin />} />
+
         </Routes>
       </div>
   );

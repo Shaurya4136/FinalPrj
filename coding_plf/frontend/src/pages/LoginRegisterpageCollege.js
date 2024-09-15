@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FaLock, FaUser } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-const LoginRegisterPageClub = () => {
+const LoginRegisterPageCollege = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const navigate = useNavigate();
 
+  
   const handleLogin = (e) => {
     e.preventDefault();
     console.log("Login clicked with:", { email, password });
+
+    navigate("/college-community"); // Use your route path for StudentCommunity.js
   };
 
   const handleRegister = (e) => {
@@ -155,4 +160,4 @@ const LoginRegisterPageClub = () => {
   );
 };
 
-export default LoginRegisterPageClub;
+export default LoginRegisterPageCollege;
