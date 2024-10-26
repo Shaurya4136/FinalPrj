@@ -1,25 +1,45 @@
 // src/components/ClubNavbar.js
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 const ClubNavbar = () => {
   const [showProfileOptions, setShowProfileOptions] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
+  const dropdownRef = useRef(null);
 
   const toggleProfileOptions = () => {
-    setShowProfileOptions(!showProfileOptions);
+    setShowProfileOptions((prev) => !prev);
   };
 
-  // Function to handle navigation
   const handleNavigation = (path) => {
-    navigate(path); // Navigate to the selected path
+    navigate(path);
+    setShowProfileOptions(false); // Close dropdown after navigation
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
+  // Close dropdown if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowProfileOptions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="flex justify-between items-center p-4 bg-gray-800 shadow-lg">
       <h1 className="text-2xl font-bold">Club Community</h1>
-      <div className="relative">
+      <div className="relative" ref={dropdownRef}>
         <FaUserCircle
           className="text-4xl cursor-pointer"
           onClick={toggleProfileOptions}
@@ -29,25 +49,25 @@ const ClubNavbar = () => {
             <ul className="py-2">
               <li
                 className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                onClick={() => handleNavigation('/club-community')} // Navigate to Club Community
+                onClick={() => handleNavigation('/club-community')}
               >
                 Club Community
               </li>
               <li
                 className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                onClick={() => handleNavigation('/club-profile')} // Navigate to Profile
+                onClick={() => handleNavigation('/club-profile')}
               >
                 Profile
               </li>
               <li
                 className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                onClick={() => handleNavigation('/club-post')} // Navigate to Logout (Login/Register Page)
+                onClick={() => handleNavigation('/club-post')}
               >
                 Post
               </li>
               <li
                 className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                onClick={() => handleNavigation('/club-logout')} // Navigate to Logout (Login/Register Page)
+                onClick={handleLogout}
               >
                 Logout
               </li>

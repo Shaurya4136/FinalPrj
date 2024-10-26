@@ -1,19 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // Import useEffect
 import { FaUserCircle, FaEdit, FaSignOutAlt } from 'react-icons/fa';
 import ClubNavbar from '../../components/ClubNavbar';
 
 const ClubProfile = () => {
   const [showEditPopup, setShowEditPopup] = useState(false);
-  const [profileData, setProfileData] = useState({
-    name: 'Club Name',
-    email: 'clubemail@example.com',
-    bio: 'We are a club focused on software development and coding challenges.',
-    avatar: 'https://via.placeholder.com/150',
-    foundedDate: 'March 2019',
-    activities: ['Hackathons', 'Workshops', 'Networking Events'],
-  });
+  const [profileData, setProfileData] = useState(null); // Start with null to indicate loading
+  const [editProfileData, setEditProfileData] = useState(null);
 
-  const [editProfileData, setEditProfileData] = useState(profileData);
+  // Fetch profile data from the backend API
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/club-profile/671b51dd00819e182e1a191b'); // Replace with your profile ID or endpoint
+        if (!response.ok) {
+          throw new Error('Failed to fetch profile data');
+        }
+        const data = await response.json();
+        setProfileData(data);
+        setEditProfileData(data); // Initialize edit profile data with fetched data
+      } catch (error) {
+        console.error('Error fetching profile data:', error);
+      }
+    };
+
+    fetchProfileData();
+  }, []); // Empty dependency array to run once on mount
+
+  // Handle loading state
+  if (!profileData) {
+    return <div>Loading...</div>; // Display loading message while fetching data
+  }
 
   const toggleEditPopup = () => {
     setShowEditPopup(!showEditPopup);
@@ -60,15 +76,43 @@ const ClubProfile = () => {
     setEditProfileData({ ...editProfileData, activities: updatedActivities });
   };
 
-  const updateProfile = () => {
-    setProfileData(editProfileData);
-    setShowEditPopup(false);
+  const handleEditSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      await updateProfile('671b51dd00819e182e1a191b', editProfileData); // Replace with the actual profile ID
+      setProfileData(editProfileData); // Update the profile data with the new changes
+      setShowEditPopup(false); // Close the popup after saving
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+    }
+  };
+
+  const updateProfile = async (id, profileData) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/club-profile/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profileData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error updating profile');
+      }
+
+      const updatedProfile = await response.json();
+      console.log('Profile updated:', updatedProfile);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <ClubNavbar />
-      
+
       {/* Profile Header */}
       <div className="flex items-center justify-between p-8">
         <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-teal-400">Club Profile</h1>
@@ -174,6 +218,7 @@ const ClubProfile = () => {
                 value={editProfileData.email}
                 onChange={handleInputChange}
                 className="bg-gray-700 text-white p-2 rounded-lg w-full"
+                readOnly // Making email read-only for security
               />
             </div>
 
@@ -188,6 +233,17 @@ const ClubProfile = () => {
             </div>
 
             <div className="mb-4">
+              <label className="block text-gray-400 mb-2">Founded Date</label>
+              <input
+                type="text"
+                name="foundedDate"
+                value={editProfileData.foundedDate}
+                onChange={handleInputChange}
+                className="bg-gray-700 text-white p-2 rounded-lg w-full"
+              />
+            </div>
+
+            <div className="mb-4">
               <label className="block text-gray-400 mb-2">Activities</label>
               {editProfileData.activities.map((activity, index) => (
                 <div key={index} className="flex items-center mb-2">
@@ -195,34 +251,36 @@ const ClubProfile = () => {
                     type="text"
                     value={activity}
                     onChange={(e) => handleActivitiesChange(e, index)}
-                    className="bg-gray-700 text-white p-2 rounded-lg w-full mr-2"
+                    className="bg-gray-700 text-white p-2 rounded-lg w-full"
                   />
                   <button
+                    type="button"
                     onClick={() => removeActivity(index)}
-                    className="bg-red-600 text-white px-2 py-1 rounded-lg hover:bg-red-500 transition-all"
+                    className="bg-red-600 text-white ml-2 px-4 py-2 rounded-lg"
                   >
                     Remove
                   </button>
                 </div>
               ))}
               <button
+                type="button"
                 onClick={addActivity}
-                className="mt-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-500 transition-all"
+                className="bg-green-600 text-white mt-2 px-4 py-2 rounded-lg"
               >
                 Add Activity
               </button>
             </div>
 
-            <div className="flex justify-end mt-6">
+            <div className="flex justify-between mt-6">
               <button
                 onClick={toggleEditPopup}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition-all mr-2"
+                className="bg-gray-600 text-white px-4 py-2 rounded-lg"
               >
                 Cancel
               </button>
               <button
-                onClick={updateProfile}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition-all"
+                onClick={handleEditSubmit}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg"
               >
                 Save Changes
               </button>
