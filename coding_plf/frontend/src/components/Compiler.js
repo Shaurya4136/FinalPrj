@@ -17,8 +17,16 @@ const CodeEditor = ({ languages, initialLanguage = 'python3', onRun }) => {
 
   const handleRunCode = async () => {
     try {
-      const result = await onRun(code, language);
-      setOutput(result);
+      const response = await fetch('http://localhost:5000/run', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code, language }),
+      });
+  
+      const data = await response.json();
+      setOutput(data.output || 'No output');
     } catch (error) {
       setOutput('Error: Unable to execute the code.');
     }

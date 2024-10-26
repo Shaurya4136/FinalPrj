@@ -7,9 +7,8 @@ const DarkThemeCards = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
   const navigate = useNavigate(); // Initialize useNavigate
 
-  // Ensure handlers are functions, not called immediately
-  const handleNavigation = (path) => {
-    navigate(path);
+  const handleNavigation = (path, role) => {
+    navigate(path, { state: { role } }); // Pass the role as state
   };
 
   const handleMouseMove = (e) => {
@@ -45,7 +44,7 @@ const DarkThemeCards = () => {
             onMouseMove={handleMouseMove}
             onMouseEnter={() => handleMouseEnter("Student")}
             onMouseLeave={handleMouseLeave}
-            onClick={() => handleNavigation('/StudentLoginRegister')} // Handle navigation
+            onClick={() => handleNavigation('/StudentLoginRegister', 'Student')} // Pass role
             style={{ background: 'radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 191, 255, 0.3), transparent 60%)' }}
           >
             <FaUserGraduate className="text-cyan-300 text-6xl mb-4 mx-auto transition-transform duration-300 transform hover:scale-125" />
@@ -64,7 +63,7 @@ const DarkThemeCards = () => {
             onMouseMove={handleMouseMove}
             onMouseEnter={() => handleMouseEnter("Club Head")}
             onMouseLeave={handleMouseLeave}
-            onClick={() => handleNavigation('/ClubHeadLoginRegister')} // Handle navigation
+            onClick={() => handleNavigation('/ClubHeadLoginRegister', 'Club Head')} // Pass role
             style={{ background: 'radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 191, 255, 0.3), transparent 60%)' }}
           >
             <FaUsers className="text-cyan-300 text-6xl mb-4 mx-auto transition-transform duration-300 transform hover:scale-125" />
@@ -83,7 +82,7 @@ const DarkThemeCards = () => {
             onMouseMove={handleMouseMove}
             onMouseEnter={() => handleMouseEnter("College")}
             onMouseLeave={handleMouseLeave}
-            onClick={() => handleNavigation('/CollegeLoginRegister')} // Handle navigation
+            onClick={() => handleNavigation('/CollegeLoginRegister', 'College')} // Pass role
             style={{ background: 'radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 191, 255, 0.3), transparent 60%)' }}
           >
             <FaUniversity className="text-cyan-300 text-6xl mb-4 mx-auto transition-transform duration-300 transform hover:scale-125" />
