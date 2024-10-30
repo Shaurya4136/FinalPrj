@@ -23,7 +23,7 @@ const HomePage = () => {
 
   const handleRunCode = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/compile', { language, code });
+      const response = await axios.post('http://localhost:5000/run', { language, code });
       setOutput(response.data.output);
     } catch (error) {
       setOutput('Error: ' + error.message);
