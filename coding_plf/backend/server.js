@@ -5,6 +5,8 @@ const axios = require('axios');
 require('dotenv').config();
 const authRoutes = require('./routes/authroutes');
 const clubProfileRoutes = require('./routes/clubProfile'); // Import the club profile routes
+const studentProfileRoutes = require('./routes/Student');
+const authenticateToken = require('./middleware/authenticateStudentProfile')
 
 const app = express();
 app.use(cors());
@@ -26,7 +28,7 @@ const JUDGE0_API_URL = 'https://judge0-ce.p.rapidapi.com/submissions';
 const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY; 
 
 // Code execution route
-app.post('/run', async (req, res) => {
+app.post('/', async (req, res) => {
   const { code, language } = req.body;
 
   // Map languages to Judge0 language_id
@@ -76,6 +78,8 @@ app.post('/run', async (req, res) => {
 // Routes
 app.use('/auth', authRoutes); // Use the authentication routes
 app.use('/api/club-profile', clubProfileRoutes); // Use the club profile routes
+app.use('/api/student', authenticateToken, studentProfileRoutes);
+
 
 
 // Basic route to test registration
