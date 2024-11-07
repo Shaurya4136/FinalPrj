@@ -17,7 +17,7 @@ const CodeEditor = ({ languages, initialLanguage = 'python3', onRun }) => {
 
   const handleRunCode = async () => {
     try {
-      const response = await fetch('http://localhost:5000/run', {
+      const response = await fetch('https://finalprj-backend.onrender.com/run', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
