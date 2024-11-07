@@ -23,7 +23,7 @@ const HomePage = () => {
 
   const handleRunCode = async () => {
     try {
-      const response = await axios.post('https://backend-1-w4pq.onrender.com/run', { language, code });
+      const response = await axios.post('https://finalprj-backend.onrender.com/run', { language, code });
       setOutput(response.data.output);
     } catch (error) {
       setOutput('Error: ' + error.message);
