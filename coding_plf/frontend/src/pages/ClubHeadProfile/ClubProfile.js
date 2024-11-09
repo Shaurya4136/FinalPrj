@@ -90,7 +90,7 @@ const ClubProfile = () => {
 
   const updateProfile = async (id, profileData) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/club-profile/${id}`, {
+      const response = await fetch(`https://finalprj-backend.onrender.com/api/club-profile/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
