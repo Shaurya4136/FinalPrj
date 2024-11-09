@@ -16,7 +16,7 @@ const LoginRegisterPageStudent = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("https://backend-1-w4pq.onrender.com/auth/login", {
+      const response = await axios.post("https://finalprj-backend.onrender.com/auth/login", {
         email,
         password,
         role, // Include role in the login request
@@ -36,7 +36,7 @@ const LoginRegisterPageStudent = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/auth/register", {
+      const response = await axios.post("https://finalprj-backend.onrender.com/auth/register", {
         name,
         email,
         password,

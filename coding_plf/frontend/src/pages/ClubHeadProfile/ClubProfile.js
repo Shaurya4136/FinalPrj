@@ -11,7 +11,7 @@ const ClubProfile = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await fetch('https://backend-1-w4pq.onrender.com/api/club-profile/671b51dd00819e182e1a191b'); // Replace with your profile ID or endpoint
+        const response = await fetch('https://finalprj-backend.onrender.com/api/club-profile/671b51dd00819e182e1a191b'); // Replace with your profile ID or endpoint
         if (!response.ok) {
           throw new Error('Failed to fetch profile data');
         }
@@ -90,7 +90,7 @@ const ClubProfile = () => {
 
   const updateProfile = async (id, profileData) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/club-profile/${id}`, {
+      const response = await fetch(`https://finalprj-backend.onrender.com/api/club-profile/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -9,9 +9,11 @@ const studentProfileRoutes = require('./routes/Student');
 const authenticateToken = require('./middleware/authenticateStudentProfile')
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 app.use(express.json());
-
+app.options('*', cors());
 // Connect to MongoDB using Mongoose
 const uri = process.env.MONGO_URI;
 

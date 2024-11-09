@@ -25,7 +25,7 @@ const StudentProfile = () => {
               throw new Error("No token found");
           }
   
-          const response = await axios.get('http://localhost:5000/api/student/profile', {
+          const response = await axios.get('https://finalprj-backend.onrender.com/api/student/profile', {
               headers: {
                   Authorization: `Bearer ${token}`,
               }
@@ -94,7 +94,7 @@ const StudentProfile = () => {
 
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.put('http://localhost:5000/api/student/profile', editProfileData, {
+        const response = await axios.put('https://finalprj-backend.onrender.com/api/student/profile', editProfileData, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
