@@ -115,6 +115,7 @@ const StudentProfile = () => {
 
 
   const handleLogout = () => {
+    const navigate = useNavigate();
     localStorage.removeItem('token');
     navigate('/login');
   };
