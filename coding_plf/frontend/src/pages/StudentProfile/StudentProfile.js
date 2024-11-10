@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaUserCircle, FaEdit, FaSignOutAlt } from 'react-icons/fa';
 import StudentNavbar from '../../components/StudentNavbar';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const StudentProfile = () => {
   const [showEditPopup, setShowEditPopup] = useState(false);
