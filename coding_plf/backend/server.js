@@ -46,7 +46,7 @@ const JUDGE0_API_URL = 'https://judge0-ce.p.rapidapi.com/submissions';
 const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY;
 
 // Code execution route
-app.post('/', async (req, res) => {
+app.post('/run', async (req, res) => {
   const { code, language } = req.body;
 
   const languageMap = {
