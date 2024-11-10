@@ -115,7 +115,7 @@ const StudentProfile = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    window.location.href = 'https://finalprj-backend.onrender.com/login';
+    window.location.href = 'https://finalprj-qofc.onrender.com/login';
   };
 
   if (!profileData) {
