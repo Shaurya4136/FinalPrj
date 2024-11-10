@@ -4,19 +4,35 @@ const cors = require('cors');
 const axios = require('axios');
 require('dotenv').config();
 const authRoutes = require('./routes/authroutes');
-const clubProfileRoutes = require('./routes/clubProfile'); // Import the club profile routes
+const clubProfileRoutes = require('./routes/clubProfile');
 const studentProfileRoutes = require('./routes/Student');
-const authenticateToken = require('./middleware/authenticateStudentProfile')
+const authenticateToken = require('./middleware/authenticateStudentProfile');
 
 const app = express();
+
+// Allowed origins for CORS
+const allowedOrigins = [
+  'http://localhost:3000',                  // Development
+  'https://finalprj-qofc.onrender.com'      // Production
+];
+
+// CORS configuration
 app.use(cors({
-  origin: 'http://localhost:3000'
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true // Enables cookies and credentials if needed
 }));
+
 app.use(express.json());
 app.options('*', cors());
+
 // Connect to MongoDB using Mongoose
 const uri = process.env.MONGO_URI;
-
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('Connected successfully to MongoDB');
@@ -27,13 +43,12 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // Judge0 API configuration
 const JUDGE0_API_URL = 'https://judge0-ce.p.rapidapi.com/submissions';
-const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY; 
+const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY;
 
 // Code execution route
 app.post('/', async (req, res) => {
   const { code, language } = req.body;
 
-  // Map languages to Judge0 language_id
   const languageMap = {
     python3: 71,
     javascript: 63,
@@ -48,7 +63,6 @@ app.post('/', async (req, res) => {
   }
 
   try {
-    // Create a code submission
     const response = await axios.post(
       `${JUDGE0_API_URL}?base64_encoded=false&wait=true`,
       {
@@ -65,28 +79,20 @@ app.post('/', async (req, res) => {
     );
 
     const { stdout, stderr } = response.data;
-
-    // Return the result to the client
-    if (stderr) {
-      res.json({ output: stderr });
-    } else {
-      res.json({ output: stdout });
-    }
+    res.json({ output: stderr || stdout });
   } catch (error) {
     res.status(500).json({ error: 'Failed to execute code' });
   }
 });
 
 // Routes
-app.use('/auth', authRoutes); // Use the authentication routes
-app.use('/api/club-profile', clubProfileRoutes); // Use the club profile routes
+app.use('/auth', authRoutes);
+app.use('/api/club-profile', clubProfileRoutes);
 app.use('/api/student', authenticateToken, studentProfileRoutes);
-
-
 
 // Basic route to test registration
 app.post('/auth/register', (req, res) => {
-    res.send('User registered successfully');
+  res.send('User registered successfully');
 });
 
 // Start the server
