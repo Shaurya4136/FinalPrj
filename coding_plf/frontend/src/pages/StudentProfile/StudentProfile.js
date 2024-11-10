@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
 import { FaUserCircle, FaEdit, FaSignOutAlt } from 'react-icons/fa';
 import StudentNavbar from '../../components/StudentNavbar';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const StudentProfile = () => {
+  const navigate = useNavigate();
   const [showEditPopup, setShowEditPopup] = useState(false);
   const [profileData, setProfileData] = useState({
     name: '',
@@ -115,7 +117,7 @@ const StudentProfile = () => {
 
 
   const handleLogout = () => {
-    const navigate = useNavigate();
+  
     localStorage.removeItem('token');
     navigate('/login');
   };
